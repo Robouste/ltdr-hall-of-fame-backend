@@ -7,6 +7,8 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using ltdr_hall_of_fame_backend.Models;
 
 namespace ltdr_hall_of_fame_backend
 {
@@ -14,7 +16,24 @@ namespace ltdr_hall_of_fame_backend
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            var host = BuildWebHost(args);
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                try
+                {
+                    SeedData.Initialize(services);
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occured seeding the DB");
+                }
+            }
+
+            host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using ltdr_hall_of_fame_backend.Models;
+using Newtonsoft.Json.Serialization;
 
 namespace ltdr_hall_of_fame_backend
 {
@@ -23,7 +26,24 @@ namespace ltdr_hall_of_fame_backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+
+            services.AddDbContext<HallOfFameContext>(options =>
+                options.UseSqlite("Data Source=Jokes.db"));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +54,7 @@ namespace ltdr_hall_of_fame_backend
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("CorsPolicy");
             app.UseMvc();
         }
     }
