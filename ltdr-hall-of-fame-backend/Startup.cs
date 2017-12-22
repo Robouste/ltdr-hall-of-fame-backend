@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using ltdr_hall_of_fame_backend.Models;
 using Newtonsoft.Json.Serialization;
+using AutoMapper;
 
 namespace ltdr_hall_of_fame_backend
 {
@@ -34,6 +35,8 @@ namespace ltdr_hall_of_fame_backend
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
+
+            services.AddAutoMapper();
 
             services.AddMvc().AddJsonOptions(options =>
             {

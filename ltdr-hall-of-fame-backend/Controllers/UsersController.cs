@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ltdr_hall_of_fame_backend.Models;
+using ltdr_hall_of_fame_backend.ViewModels;
 
 namespace ltdr_hall_of_fame_backend.Controllers
 {
@@ -22,9 +23,9 @@ namespace ltdr_hall_of_fame_backend.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public IEnumerable<User> GetUsers()
+        public IEnumerable<UserViewModel> GetUsers()
         {
-            return _context.Users;
+            return _context.Users.Select(user => AutoMapper.Mapper.Map<UserViewModel>(user));
         }
 
         // GET: api/Users/5
@@ -43,7 +44,7 @@ namespace ltdr_hall_of_fame_backend.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(AutoMapper.Mapper.Map<UserViewModel>(user));
         }
 
         // PUT: api/Users/5
