@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ltdr_hall_of_fame_backend.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ltdr_hall_of_fame_backend.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/Jokes")]
     public class JokesController : Controller
@@ -22,6 +24,7 @@ namespace ltdr_hall_of_fame_backend.Controllers
 
         // GET: api/Jokes
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Joke> GetJokes()
         {
             var result = _context.Jokes

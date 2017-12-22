@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ltdr_hall_of_fame_backend.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ltdr_hall_of_fame_backend.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/Votes")]
     public class VotesController : Controller
@@ -90,7 +92,22 @@ namespace ltdr_hall_of_fame_backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Votes.Add(vote);
+            var existingVote = _context.Votes.SingleOrDefault(v => v.JokeId == vote.JokeId && v.UserId == vote.UserId);
+
+            if (existingVote != null && existingVote.VoteState != vote.VoteState)
+            {
+                existingVote.VoteState = vote.VoteState;
+                _context.Entry(existingVote).State = EntityState.Modified;
+            }
+            else if(existingVote == null)
+            {
+                _context.Votes.Add(vote);
+            }
+            else
+            {
+                return BadRequest("You can't vote twice the same choice");
+            }
+
             try
             {
                 await _context.SaveChangesAsync();

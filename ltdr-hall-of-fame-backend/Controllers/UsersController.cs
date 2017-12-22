@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ltdr_hall_of_fame_backend.Models;
 using ltdr_hall_of_fame_backend.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ltdr_hall_of_fame_backend.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/Users")]
     public class UsersController : Controller
