@@ -29,7 +29,8 @@ namespace ltdr_hall_of_fame_backend.Controllers
         {
             var result = _context.Jokes
                 .Include(joke => joke.Votes)
-                    .ThenInclude(vote => vote.User);
+                    .ThenInclude(vote => vote.User)
+                .OrderByDescending(joke => joke.Id);
 
             return result;
         }
