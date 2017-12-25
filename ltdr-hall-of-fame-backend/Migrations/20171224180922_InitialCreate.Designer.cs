@@ -10,14 +10,14 @@ using System;
 namespace ltdrhalloffamebackend.Migrations
 {
     [DbContext(typeof(HallOfFameContext))]
-    [Migration("20171222172417_InitialCreate")]
+    [Migration("20171224180922_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
+                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452");
 
             modelBuilder.Entity("ltdr_hall_of_fame_backend.Models.Joke", b =>
                 {
@@ -38,9 +38,18 @@ namespace ltdrhalloffamebackend.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("Password");
+
+                    b.Property<string>("Role");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
 
                     b.ToTable("Users");
                 });

@@ -24,6 +24,9 @@ namespace ltdr_hall_of_fame_backend.Models
             modelBuilder.Entity<User>()
                 .HasKey(user => user.Id);
 
+            modelBuilder.Entity<User>()
+                .HasAlternateKey(user => user.Name);
+
             modelBuilder.Entity<Vote>()
                 .HasKey(voteHistory => new { voteHistory.UserId, voteHistory.JokeId });
 
@@ -40,6 +43,8 @@ namespace ltdr_hall_of_fame_backend.Models
         public string Description { get; set; }
         public string Author { get; set; }
         public ICollection<Vote> Votes { get; set; }
+        public string createdBy { get; set; }
+        public DateTimeOffset createdAt { get; set; }
     }
 
     public class User
@@ -47,6 +52,8 @@ namespace ltdr_hall_of_fame_backend.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
+        public string Description { get; set; }
     }
 
     public class Vote

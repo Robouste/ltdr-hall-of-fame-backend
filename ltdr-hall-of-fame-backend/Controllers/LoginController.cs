@@ -46,24 +46,28 @@ namespace ltdr_hall_of_fame_backend.Controllers
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, request.Name)
+                new Claim(ClaimTypes.Name, request.Name),
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim(ClaimTypes.Sid, user.Id.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecurityKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expiresAt = DateTime.Now.AddMinutes(30);
 
             var token = new JwtSecurityToken(
                 issuer: "hos.robouste.be",
                 audience: "hos.robouste.be",
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: expiresAt,
                 signingCredentials: creds
             );
 
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                user = AutoMapper.Mapper.Map<UserViewModel>(user)
+                user = AutoMapper.Mapper.Map<UserViewModel>(user),
+                expiresAt = expiresAt
             });
         }
     }

@@ -12,6 +12,7 @@ namespace ltdr_hall_of_fame_backend.ViewModels
         public Mapping()
         {
             CreateMap<User, UserViewModel>();
+            CreateMap<Joke, JokeViewModel>();
         }
     }
 }

@@ -98,6 +98,21 @@ namespace ltdr_hall_of_fame_backend.Controllers
                 return BadRequest(ModelState);
             }
 
+            var user = _context.Users.SingleOrDefault(u => u.Name == User.Identity.Name);
+
+            if (user == null)
+            {
+                return BadRequest("Utilisateur non connecté");
+            }
+
+            if (user.Password == "098f6bcd4621d373cade4e832627b4f6")
+            {
+                return BadRequest("Tu dois d'abord changer ton mot de passe si tu veux ajouter une blague !");
+            }
+
+            joke.createdAt = DateTime.Now;
+            joke.createdBy = user.Name;
+
             _context.Jokes.Add(joke);
             await _context.SaveChangesAsync();
 
@@ -106,6 +121,7 @@ namespace ltdr_hall_of_fame_backend.Controllers
 
         // DELETE: api/Jokes/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "gourou,executeur")]
         public async Task<IActionResult> DeleteJoke([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -117,6 +133,12 @@ namespace ltdr_hall_of_fame_backend.Controllers
             if (joke == null)
             {
                 return NotFound();
+            }
+            var votes = _context.Votes.Where(vote => vote.JokeId == joke.Id);
+
+            if (votes != null)
+            {
+                _context.Votes.RemoveRange(votes);
             }
 
             _context.Jokes.Remove(joke);

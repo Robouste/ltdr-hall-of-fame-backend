@@ -12,10 +12,10 @@ namespace ltdrhalloffamebackend.Migrations
                 name: "Jokes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Author = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Author = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,22 +26,26 @@ namespace ltdrhalloffamebackend.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: true),
+                    Role = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.UniqueConstraint("AK_Users_Name", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Votes",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
-                    JokeId = table.Column<int>(nullable: false),
-                    VoteState = table.Column<short>(nullable: false)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    JokeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    VoteState = table.Column<short>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

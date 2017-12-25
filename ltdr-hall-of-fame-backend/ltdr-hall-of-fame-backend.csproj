@@ -4,10 +4,9 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Migrations\20171222181906_UserPassword.cs" />
-    <Compile Remove="Migrations\20171222181906_UserPassword.Designer.cs" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug\netcoreapp2.0\</OutputPath>
+  </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
