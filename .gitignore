@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /ltdr-hall-of-fame-backend/Properties/PublishProfiles
+/ltdr-hall-of-fame-backend/Jokes.db
